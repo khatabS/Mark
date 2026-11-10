@@ -109,7 +109,113 @@ button:hover{
 
 </div>
 
-<script src="app.js"></script>
+<script>
+    
+// مستخدمين تجريبيين
 
+const users = [
+
+{
+    username:"admin",
+    password:"123456",
+    role:"admin"
+},
+
+{
+    username:"teacher1",
+    password:"123456",
+    role:"teacher"
+},
+
+{
+    username:"student1",
+    password:"123456",
+    role:"student"
+},
+
+{
+    username:"parent1",
+    password:"123456",
+    role:"parent"
+}
+
+];
+
+function login(){
+
+    let username =
+    document.getElementById("username").value;
+
+    let password =
+    document.getElementById("password").value;
+
+    let user = users.find(u =>
+        u.username === username &&
+        u.password === password
+    );
+
+    if(user){
+
+        document.getElementById("loginBox").style.display = "none";
+
+        document.getElementById("dashboard").style.display = "block";
+
+        document.getElementById("welcome").innerHTML =
+        "مرحباً " + user.role;
+
+        buildPermissions(user.role);
+
+    }
+    else{
+        alert("اسم المستخدم أو كلمة المرور غير صحيحة");
+    }
+
+}
+
+function buildPermissions(role){
+
+    let cards =
+    document.querySelectorAll(".card");
+
+    if(role === "student"){
+
+        cards[0].style.display="none";
+        cards[2].style.display="none";
+
+    }
+
+    if(role === "parent"){
+
+        cards[0].style.display="none";
+        cards[1].style.display="block";
+        cards[2].style.display="block";
+
+    }
+
+    if(role === "teacher"){
+
+        cards[0].style.display="block";
+        cards[1].style.display="block";
+        cards[2].style.display="block";
+
+    }
+
+    if(role === "admin"){
+
+        cards[0].style.display="block";
+        cards[1].style.display="block";
+        cards[2].style.display="block";
+
+    }
+
+}
+
+function logout(){
+
+    location.reload();
+
+}
+
+</script>
 </body>
 </html>
