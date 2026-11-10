@@ -1,39 +1,603 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<title>نظام المدرسة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>نظام إدارة المدرسة</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Tahoma,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.box{
+    width:100%;
+    max-width:400px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 15px rgba(0,0,0,.1);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#2563eb;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:1px solid #ddd;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+}
+
+.secondary{
+    background:#16a34a;
+    color:white;
+}
+
+.linkbtn{
+    background:#f3f4f6;
+}
+
+#registerPage,
+#dashboard{
+    display:none;
+}
+
+.header{
+    background:#2563eb;
+    color:white;
+    padding:15px;
+}
+
+.content{
+    padding:15px;
+}
+
+.card{
+    background:white;
+    margin-bottom:15px;
+    border-radius:10px;
+    padding:15px;
+    box-shadow:0 0 10px rgba(0,0,0,.08);
+}
+
+.logout{
+    background:red;
+    color:white;
+}
+
+.badge{
+    background:#e5e7eb;
+    padding:8px;
+    border-radius:6px;
+    margin-top:10px;
+}
+
+@media(max-width:600px){
+
+.box{
+    max-width:100%;
+}
+
+h2{
+    font-size:22px;
+}
+
+}
+
+</style>
 </head>
+
 <body>
 
-<h1>نظام إدارة المدرسة</h1>
+<!-- تسجيل الدخول -->
 
-<div id="app"></div>
+<div id="loginPage" class="page">
+
+    <div class="box">
+
+        <h2>تسجيل الدخول</h2>
+
+        <input
+        type="text"
+        id="loginUsername"
+        placeholder="اسم المستخدم">
+
+        <input
+        type="password"
+        id="loginPassword"
+        placeholder="كلمة المرور">
+
+        <button
+        class="primary"
+        onclick="login()">
+        دخول
+        </button>
+
+        <button
+        class="linkbtn"
+        onclick="showRegister()">
+        إنشاء حساب جديد
+        </button>
+
+    </div>
+
+</div>
+
+<!-- إنشاء حساب -->
+
+<div id="registerPage" class="page">
+
+    <div class="box">
+
+        <h2>إنشاء حساب</h2>
+
+        <input
+        type="text"
+        id="regName"
+        placeholder="الاسم الكامل">
+
+        <input
+        type="text"
+        id="regUsername"
+        placeholder="اسم المستخدم">
+
+        <input
+        type="password"
+        id="regPassword"
+        placeholder="كلمة المرور">
+
+        <select id="regRole">
+
+            <option value="student">
+                طالب
+            </option>
+
+            <option value="parent">
+                ولي أمر
+            </option>
+
+            <option value="teacher">
+                معلم
+            </option>
+
+        </select>
+
+        <button
+        class="secondary"
+        onclick="registerUser()">
+        إنشاء الحساب
+        </button>
+
+        <button
+        class="linkbtn"
+        onclick="showLogin()">
+        رجوع للدخول
+        </button>
+
+    </div>
+
+</div>
+
+<!-- لوحة التحكم -->
+
+<div id="dashboard">
+
+    <div class="header">
+        <h2 id="welcomeText"></h2>
+    </div>
+
+    <div class="content">
+
+        <div class="card">
+            <h3>معلومات الحساب</h3>
+            <div id="userInfo"></div>
+        </div>
+
+        <!-- المدير -->
+
+        <div
+        id="adminPanel"
+        class="card">
+
+            <h3>لوحة المدير</h3>
+
+            <p>إدارة المستخدمين والصلاحيات</p>
+
+        </div>
+
+        <!-- المعلم -->
+
+        <div
+        id="teacherPanel"
+        class="card">
+
+            <h3>لوحة المعلم</h3>
+
+            <p>إدارة الدرجات والحضور</p>
+
+        </div>
+
+        <!-- الطالب -->
+
+        <div
+        id="studentPanel"
+        class="card">
+
+            <h3>لوحة الطالب</h3>
+
+            <p>عرض الدرجات والواجبات</p>
+
+        </div>
+
+        <!-- ولي الأمر -->
+
+        <div
+        id="parentPanel"
+        class="card">
+
+            <h3>لوحة ولي الأمر</h3>
+
+            <p>متابعة الطالب</p>
+
+        </div>
+
+        <button
+        class="logout"
+        onclick="logout()">
+        تسجيل خروج
+        </button>
+
+    </div>
+
+</div>
 
 <script src="app.js">
-    document.getElementById("app").innerHTML = `
-<h2>مرحباً بك</h2>
 
-<button onclick="showUsers()">
-عرض المستخدمين
-</button>
+    
+// إنشاء المدير الافتراضي
 
-<div id="result"></div>
-`;
+if(!localStorage.getItem("users")){
 
-const users = [
-{
-name:"المدير",
-role:"Admin"
+    const defaultUsers = [
+
+        {
+            name:"مدير النظام",
+            username:"admin",
+            password:"123456",
+            role:"admin"
+        }
+
+    ];
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(defaultUsers)
+    );
+
 }
-];
 
-function showUsers(){
+// عرض صفحة التسجيل
 
-document.getElementById("result").innerHTML =
-users.map(x=>`
-<p>${x.name} - ${x.role}</p>
-`).join("");
+function showRegister(){
+
+    document.getElementById(
+        "loginPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "registerPage"
+    ).style.display="flex";
+
+}
+
+// عرض صفحة الدخول
+
+function showLogin(){
+
+    document.getElementById(
+        "registerPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "loginPage"
+    ).style.display="flex";
+
+}
+
+// إنشاء حساب
+
+function registerUser(){
+
+    let name =
+    document.getElementById(
+        "regName"
+    ).value;
+
+    let username =
+    document.getElementById(
+        "regUsername"
+    ).value;
+
+    let password =
+    document.getElementById(
+        "regPassword"
+    ).value;
+
+    let role =
+    document.getElementById(
+        "regRole"
+    ).value;
+
+    if(
+        !name ||
+        !username ||
+        !password
+    ){
+
+        alert("أكمل جميع الحقول");
+        return;
+
+    }
+
+    let users =
+    JSON.parse(
+        localStorage.getItem("users")
+    );
+
+    let exist =
+    users.find(
+        u => u.username === username
+    );
+
+    if(exist){
+
+        alert(
+            "اسم المستخدم مستخدم مسبقاً"
+        );
+
+        return;
+    }
+
+    users.push({
+
+        name:name,
+        username:username,
+        password:password,
+        role:role
+
+    });
+
+    localStorage.setItem(
+        "users",
+        JSON.stringify(users)
+    );
+
+    alert(
+        "تم إنشاء الحساب"
+    );
+
+    showLogin();
+
+}
+
+// تسجيل الدخول
+
+function login(){
+
+    let username =
+    document.getElementById(
+        "loginUsername"
+    ).value;
+
+    let password =
+    document.getElementById(
+        "loginPassword"
+    ).value;
+
+    let users =
+    JSON.parse(
+        localStorage.getItem("users")
+    );
+
+    let user =
+    users.find(
+
+        u =>
+        u.username===username &&
+        u.password===password
+
+    );
+
+    if(!user){
+
+        alert(
+            "بيانات الدخول غير صحيحة"
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        "loggedUser",
+        JSON.stringify(user)
+    );
+
+    loadDashboard();
+
+}
+
+// تحميل لوحة التحكم
+
+function loadDashboard(){
+
+    let user =
+    JSON.parse(
+        localStorage.getItem(
+            "loggedUser"
+        )
+    );
+
+    if(!user){
+        return;
+    }
+
+    document.getElementById(
+        "loginPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "registerPage"
+    ).style.display="none";
+
+    document.getElementById(
+        "dashboard"
+    ).style.display="block";
+
+    document.getElementById(
+        "welcomeText"
+    ).innerHTML =
+    "مرحباً " + user.name;
+
+    document.getElementById(
+        "userInfo"
+    ).innerHTML =
+
+    `
+    <div class="badge">
+    الاسم: ${user.name}
+    </div>
+
+    <div class="badge">
+    المستخدم: ${user.username}
+    </div>
+
+    <div class="badge">
+    الصلاحية: ${user.role}
+    </div>
+    `;
+
+    hideAllPanels();
+
+    if(user.role === "admin"){
+
+        document.getElementById(
+            "adminPanel"
+        ).style.display="block";
+
+    }
+
+    if(user.role === "teacher"){
+
+        document.getElementById(
+            "teacherPanel"
+        ).style.display="block";
+
+    }
+
+    if(user.role === "student"){
+
+        document.getElementById(
+            "studentPanel"
+        ).style.display="block";
+
+    }
+
+    if(user.role === "parent"){
+
+        document.getElementById(
+            "parentPanel"
+        ).style.display="block";
+
+    }
+
+}
+
+// إخفاء جميع اللوحات
+
+function hideAllPanels(){
+
+    document.getElementById(
+        "adminPanel"
+    ).style.display="none";
+
+    document.getElementById(
+        "teacherPanel"
+    ).style.display="none";
+
+    document.getElementById(
+        "studentPanel"
+    ).style.display="none";
+
+    document.getElementById(
+        "parentPanel"
+    ).style.display="none";
+
+}
+
+// خروج
+
+function logout(){
+
+    localStorage.removeItem(
+        "loggedUser"
+    );
+
+    location.reload();
+
+}
+
+// فحص دخول سابق
+
+window.onload = function(){
+
+    let user =
+    localStorage.getItem(
+        "loggedUser"
+    );
+
+    if(user){
+
+        loadDashboard();
+
+    }
 
 }
 
