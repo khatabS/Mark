@@ -1,221 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>نظام إدارة المدرسة</title>
-
-<style>
-
-body{
-    font-family:Tahoma;
-    background:#f4f6f9;
-    margin:0;
-}
-
-.container{
-    width:350px;
-    margin:100px auto;
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.2);
-}
-
-h2{
-    text-align:center;
-    color:#1e3a8a;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:5px;
-}
-
-button{
-    width:100%;
-    padding:10px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#1d4ed8;
-}
-
-.dashboard{
-    display:none;
-    padding:20px;
-}
-
-.card{
-    background:white;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
-    box-shadow:0 0 5px rgba(0,0,0,.1);
-}
-
-.logout{
-    background:red;
-}
-
-</style>
+<title>نظام المدرسة</title>
 </head>
-
 <body>
 
-<div class="container" id="loginBox">
+<h1>نظام إدارة المدرسة</h1>
 
-    <h2>تسجيل الدخول</h2>
+<div id="app"></div>
 
-    <input type="text" id="username" placeholder="اسم المستخدم">
+<script src="app.js">
+    document.getElementById("app").innerHTML = `
+<h2>مرحباً بك</h2>
 
-    <input type="password" id="password" placeholder="كلمة المرور">
+<button onclick="showUsers()">
+عرض المستخدمين
+</button>
 
-    <button onclick="login()">دخول</button>
-
-</div>
-
-<div class="dashboard" id="dashboard">
-
-    <h2 id="welcome"></h2>
-
-    <div class="card">
-        <h3>إدارة الطلاب</h3>
-        <p>إضافة وتعديل الطلاب</p>
-    </div>
-
-    <div class="card">
-        <h3>الدرجات</h3>
-        <p>إدخال وعرض الدرجات</p>
-    </div>
-
-    <div class="card">
-        <h3>الحضور والغياب</h3>
-        <p>تسجيل الحضور اليومي</p>
-    </div>
-
-    <button class="logout" onclick="logout()">تسجيل خروج</button>
-
-</div>
-
-<script>
-    
-// مستخدمين تجريبيين
+<div id="result"></div>
+`;
 
 const users = [
-
 {
-    username:"admin",
-    password:"123456",
-    role:"admin"
-},
-
-{
-    username:"teacher1",
-    password:"123456",
-    role:"teacher"
-},
-
-{
-    username:"student1",
-    password:"123456",
-    role:"student"
-},
-
-{
-    username:"parent1",
-    password:"123456",
-    role:"parent"
+name:"المدير",
+role:"Admin"
 }
-
 ];
 
-function login(){
+function showUsers(){
 
-    let username =
-    document.getElementById("username").value;
-
-    let password =
-    document.getElementById("password").value;
-
-    let user = users.find(u =>
-        u.username === username &&
-        u.password === password
-    );
-
-    if(user){
-
-        document.getElementById("loginBox").style.display = "none";
-
-        document.getElementById("dashboard").style.display = "block";
-
-        document.getElementById("welcome").innerHTML =
-        "مرحباً " + user.role;
-
-        buildPermissions(user.role);
-
-    }
-    else{
-        alert("اسم المستخدم أو كلمة المرور غير صحيحة");
-    }
-
-}
-
-function buildPermissions(role){
-
-    let cards =
-    document.querySelectorAll(".card");
-
-    if(role === "student"){
-
-        cards[0].style.display="none";
-        cards[2].style.display="none";
-
-    }
-
-    if(role === "parent"){
-
-        cards[0].style.display="none";
-        cards[1].style.display="block";
-        cards[2].style.display="block";
-
-    }
-
-    if(role === "teacher"){
-
-        cards[0].style.display="block";
-        cards[1].style.display="block";
-        cards[2].style.display="block";
-
-    }
-
-    if(role === "admin"){
-
-        cards[0].style.display="block";
-        cards[1].style.display="block";
-        cards[2].style.display="block";
-
-    }
-
-}
-
-function logout(){
-
-    location.reload();
+document.getElementById("result").innerHTML =
+users.map(x=>`
+<p>${x.name} - ${x.role}</p>
+`).join("");
 
 }
 
 </script>
+
 </body>
 </html>
